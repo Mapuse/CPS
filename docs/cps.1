@@ -1,0 +1,97 @@
+.\" Cudane Python Subsystem — Man Page
+.TH CPS 1 "2026-08-02" "cps 0.7.0" "User Commands"
+.SH NAME
+cps \- Cudane Python Subsystem: shared plugins, themes, and TUIs
+.SH SYNOPSIS
+.B cps
+.B theme
+.B list | apply | register | unregister
+.RI [ args ]
+.br
+.B cps
+.B plugin
+.B list | run | register | unregister
+.RI [ args ]
+.br
+.B cps
+.B tui
+.B list | apply | register | unregister
+.RI [ args ]
+.br
+.B cps
+.B engine
+.RI [ \-\-config \fIfile\fR ]
+.SH DESCRIPTION
+.B cps
+is the reference command-line front end for the Cudane Python Subsystem, the
+shared engine embedded by every Cudane component (csr, ctx, ous, mcx, lbt). It
+manages the theme, plugin, and TUI registries described by t.desc and p.desc
+descriptor files, and boots the engine against a configuration file.
+.SH COMMANDS
+.SS theme
+.TP
+.B theme list
+List registered themes.
+.TP
+.B theme apply \fINAME\fR
+Render the theme and print it to stdout.
+.TP
+.B theme register \fINAME\fR \fIPATH\fR
+Register a theme.
+.TP
+.B theme unregister \fINAME\fR
+Unregister a theme.
+.SS plugin
+.TP
+.B plugin list
+List registered plugins and their aliases.
+.TP
+.B plugin run \fIALIAS\fR [\fIARGS...\fR]
+Run the plugin behind an alias with the given arguments.
+.TP
+.B plugin register \fINAME\fR \fIPATH\fR
+Register a plugin.
+.TP
+.B plugin unregister \fINAME\fR
+Unregister a plugin.
+.SS tui
+.TP
+.B tui list
+List registered TUIs.
+.TP
+.B tui apply \fINAME\fR
+Run a TUI.
+.TP
+.B tui register \fINAME\fR \fIPATH\fR
+Register a TUI.
+.TP
+.B tui unregister \fINAME\fR
+Unregister a TUI.
+.SS engine
+.TP
+.B engine [\-\-config \fIFILE\fR]
+Boot the Python engine with the configuration in
+.I FILE
+(default: ~/.config/cps/config.toml, /etc/cps/config.toml, ./cps.toml) and
+render a sample prompt.
+.SH FILES
+.TP
+.I t.desc
+Theme and TUI descriptors ([theme.<id>], [tui.<id>] sections).
+.TP
+.I p.desc
+Plugin descriptors ([plugin.<id>] sections, alias map).
+.TP
+.I cps.toml
+Engine configuration ([python] section; enable with
+\fI[python] enabled = true\fR).
+.SH SEE ALSO
+.BR lbt (1),
+.BR csr (1),
+.BR ctx (1),
+.BR ous (1),
+.BR mcx (1)
+.SH AUTHOR
+Mapuse
+.SH LICENSE
+MIT

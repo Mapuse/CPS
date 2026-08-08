@@ -1,0 +1,16 @@
+# cps Plugin Descriptor
+# Register plugins for the Cudane Python Subsystem.
+# Each [plugin.<id>] section defines one plugin.
+# - name:  display name (shown in `cps plugin list`)
+# - path:  path to the Python module (absolute or ~ expanded)
+# - aliases: map of command aliases to the shell command to run ({} = args)
+#
+# A plugin file is a single .py module whose top-level callables are event hooks:
+#   on_startup(**context)     fired once when the engine boots
+#   on_shutdown(**context)    fired when the host component exits
+#   on_command(**context)     fired after each command
+
+[plugin.example]
+name = "Example"
+path = "~/CPS/examples/example_plugin.py"
+aliases = { hi = "echo 'hi from cps example plugin'" }

@@ -1,0 +1,12 @@
+# cps sample configuration
+# `cps engine` reads the first existing, parseable cps.toml from:
+#   ~/.config/cps/config.toml   /etc/cps/config.toml   ./cps.toml
+
+[python]
+enabled = true
+theme = "~/CPS/themes/cps.py"
+tui = ""
+plugins = []
+fallback_on_error = true
+venv_path = ""
+tui_mode = false

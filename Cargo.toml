@@ -1,0 +1,29 @@
+[package]
+name = "cps"
+version = "0.7.0"
+edition = "2024"
+license = "MIT"
+authors = ["Cudane"]
+description = "cps — Cudane Python Subsystem. One shared pyo3 engine (plugins, themes, TUIs) for the whole Cudane ecosystem"
+readme = "README.md"
+
+[[bin]]
+name = "cps"
+path = "src/bin/cps.rs"
+
+[lib]
+name = "cps"
+path = "src/lib.rs"
+
+[dependencies]
+serde = { version = "1.0", features = ["derive"] }
+toml = "0.8"
+pyo3 = "0.25"
+clap = { version = "4", features = ["derive"] }
+
+[profile.release]
+opt-level = "z"
+lto = true
+codegen-units = 1
+panic = "abort"
+strip = true

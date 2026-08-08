@@ -1,0 +1,7 @@
+/target
+/build
+/builddir
+Cargo.lock.orig
+
+__pycache__/
+*.pyc

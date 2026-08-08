@@ -1,0 +1,25 @@
+# cps Theme Descriptor
+# Register themes and TUIs for the Cudane Python Subsystem.
+# Each [theme.<id>] section defines one theme; each [tui.<id>] section one TUI.
+# - name:  display name (shown in `cps theme list`)
+# - path:  path to the Python module (absolute or ~ expanded)
+# - description: optional human-readable description
+#
+# A theme file is a single .py module that may define:
+#   render_prompt(**context)       -> dict | str
+#   render_right_prompt(**context) -> str
+#   render_command_summary(**context) -> str
+#   run()                          -> bool   (full-screen mode)
+#
+# A TUI file is a single .py module that defines:
+#   run()                          -> bool
+
+[theme.cps]
+name = "cps"
+path = "~/CPS/themes/cps.py"
+description = "Default cps theme — cyan accent, host-aware prompt"
+
+[theme.minimal]
+name = "Minimal"
+path = "~/CPS/themes/minimal.py"
+description = "Minimal single-line prompt with exit-code indicator"
