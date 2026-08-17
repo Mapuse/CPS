@@ -18,7 +18,7 @@ path = "src/lib.rs"
 [dependencies]
 serde = { version = "1.0", features = ["derive"] }
 toml = "0.8"
-pyo3 = "0.25"
+pyo3 = { version = "0.25", features = ["auto-initialize"] }
 clap = { version = "4", features = ["derive"] }
 
 [profile.release]
