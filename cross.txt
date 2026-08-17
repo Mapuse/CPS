@@ -4,7 +4,7 @@ cpp = 'clang++'
 ar = 'llvm-ar'
 strip = 'llvm-strip'
 rust = 'rustc'
-pkg-config = '/home/m/CPS/pkgconfig.sh'
+pkg-config = '/home/m/CPS/scripts/pkgconfig.sh'
 
 [properties]
 sys_root = '/home/m/CPS/rootfs'
