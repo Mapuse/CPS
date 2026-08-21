@@ -2,13 +2,16 @@ use std::collections::HashMap;
 use std::path::Path;
 use std::sync::{Mutex, Once, OnceLock};
 
+#[cfg(feature = "python")]
 use pyo3::prelude::*;
 
 use crate::config::PythonConfig;
 use crate::expand_tilde;
+#[cfg(feature = "python")]
 use crate::error;
 use crate::info;
 use crate::paths::{desc_candidates, load_desc};
+#[cfg(feature = "python")]
 use crate::warning;
 
 /// Parsed `[tui.<id>]` sections from a `t.desc` descriptor file.
@@ -26,11 +29,17 @@ struct TuiDescEntry {
 }
 
 /// A loaded Python TUI module. The module must expose a `run()` entry point; the host
-/// component decides *when* to call it (e.g. after startup, or as a command).
+/// component decides *when* to call it (e.g. after startup, or as a command). Built
+/// without the `python` feature this is an inert stub.
+#[cfg(feature = "python")]
 pub struct TuiEngine {
     module: PyObject,
 }
 
+#[cfg(not(feature = "python"))]
+pub struct TuiEngine {}
+
+#[cfg(feature = "python")]
 impl TuiEngine {
     /// Import the TUI module named by `cfg.tui` (a `.py` path).
     ///
@@ -82,6 +91,24 @@ impl TuiEngine {
                 false
             }
         })
+    }
+}
+
+#[cfg(not(feature = "python"))]
+impl TuiEngine {
+    /// Always `None` — the crate was built without Python support.
+    pub fn load(_cfg: &PythonConfig) -> Option<Self> {
+        None
+    }
+
+    /// Always `false`.
+    pub fn has_run(&self) -> bool {
+        false
+    }
+
+    /// Always `false`.
+    pub fn run(&self) -> bool {
+        false
     }
 }
 

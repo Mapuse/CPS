@@ -13,9 +13,9 @@
 
 `▐▀` `-` `▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▌`
 
-Shared Python subsystem for **`[Cudane]`** ecosystem. `cps` provides one `pyo3` engine for **`[plugins]`**, **`[themes]`**, and **`[TUIs]`** across Cesar, Context, Outsider, MCX, and Leon.
+Shared Python subsystem for **`[Cudane]`** ecosystem. `pyo3` engine for **`[plugins]`**, **`[themes]`**, and **`[TUIs]`** across Cesar, Context, Outsider, MCX, and Leon.
 
-- **`[Version]`**: **`[0.7.0]`**
+- **`[Version]`**: **`[0.0.70]`**
 
 `▐▄` `-` `▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▌`
 
@@ -26,7 +26,7 @@ Shared Python subsystem for **`[Cudane]`** ecosystem. `cps` provides one `pyo3` 
 
 - [**`[Overview]`**](#overview)
 - [**`[Architecture]`**](#architecture)
-- [**`[Python contract]`**](#python-contract)
+- [**`[Python]`**](#python)
 - [**`[Descriptor files]`**](#descriptor-files)
 - [**`[Configuration]`**](#configuration)
 - [**`[Integration]`**](#integration)
@@ -97,9 +97,9 @@ configured theme and TUI, and attaches plugins to the host lifecycle.
 </details>
 
 <details>
-<summary>Python contract</summary>
+<summary>Python</summary>
 
-## Python contract
+## Python
 
 A theme module may export these optional functions:
 

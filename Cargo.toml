@@ -1,6 +1,6 @@
 [package]
 name = "cps"
-version = "0.7.0"
+version = "0.0.70"
 edition = "2024"
 license = "MIT"
 authors = ["Cudane"]
@@ -18,8 +18,12 @@ path = "src/lib.rs"
 [dependencies]
 serde = { version = "1.0", features = ["derive"] }
 toml = "0.8"
-pyo3 = { version = "0.25", features = ["auto-initialize"] }
+pyo3 = { version = "0.25", features = ["auto-initialize"], optional = true }
 clap = { version = "4", features = ["derive"] }
+
+[features]
+default = ["python"]
+python = ["dep:pyo3"]
 
 [profile.release]
 opt-level = "z"

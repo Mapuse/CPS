@@ -156,11 +156,13 @@ pub(crate) fn info(msg: &str) {
 }
 
 /// Warning message through the configured reporter.
+#[cfg(feature = "python")]
 pub(crate) fn warning(msg: &str) {
     options().reporter.warning(msg);
 }
 
 /// Error message through the configured reporter.
+#[cfg(feature = "python")]
 pub(crate) fn error(msg: &str) {
     options().reporter.error(msg);
 }

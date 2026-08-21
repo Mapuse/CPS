@@ -1,5 +1,5 @@
 project('cps', 'rust',
-  version : '0.7.0',
+  version : '0.0.70',
   license : 'MIT',
   default_options : [
     'optimization=3',

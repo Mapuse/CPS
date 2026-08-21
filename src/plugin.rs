@@ -2,13 +2,16 @@ use std::collections::HashMap;
 use std::path::Path;
 use std::sync::{Mutex, Once, OnceLock};
 
+#[cfg(feature = "python")]
 use pyo3::prelude::*;
+#[cfg(feature = "python")]
 use pyo3::types::PyDict;
 
 use crate::config::PythonConfig;
 use crate::expand_tilde;
 use crate::info;
 use crate::paths::{desc_candidates, load_desc};
+#[cfg(feature = "python")]
 use crate::warning;
 
 /// Parsed `[plugin.<id>]` sections from a `p.desc` descriptor file.
@@ -35,11 +38,15 @@ pub struct PluginManager {
     plugins: Vec<LoadedPlugin>,
 }
 
+#[cfg(feature = "python")]
 struct LoadedPlugin {
     name: String,
     module: PyObject,
     hooks: Vec<String>,
 }
+
+#[cfg(not(feature = "python"))]
+struct LoadedPlugin;
 
 impl Default for PluginManager {
     fn default() -> Self {
@@ -55,6 +62,7 @@ impl PluginManager {
 
     /// Import every module in `cfg.plugins`, collecting their top-level callables
     /// as event hooks. Broken or hook-less modules are skipped with a warning.
+    #[cfg(feature = "python")]
     pub fn load_all(&mut self, cfg: &PythonConfig) {
         if cfg.plugins.is_empty() {
             return;
@@ -109,6 +117,7 @@ impl PluginManager {
     /// Fire an event to every loaded plugin that declares a matching hook.
     ///
     /// `data` becomes the `**kwargs` of the Python callable.
+    #[cfg(feature = "python")]
     pub fn fire(&self, event: &str, data: &HashMap<String, String>) {
         let _ = Python::with_gil(|py| -> PyResult<()> {
             for plugin in &self.plugins {
@@ -130,12 +139,29 @@ impl PluginManager {
     }
 
     /// Names of the live plugins.
+    #[cfg(feature = "python")]
     pub fn names(&self) -> Vec<String> {
         self.plugins.iter().map(|p| p.name.clone()).collect()
     }
+
+    /// Names of the live plugins (always empty without Python support).
+    #[cfg(not(feature = "python"))]
+    pub fn names(&self) -> Vec<String> {
+        Vec::new()
+    }
+}
+
+#[cfg(not(feature = "python"))]
+impl PluginManager {
+    /// No-op — the crate was built without Python support.
+    pub fn load_all(&mut self, _cfg: &PythonConfig) {}
+
+    /// No-op.
+    pub fn fire(&self, _event: &str, _data: &HashMap<String, String>) {}
 }
 
 /// Import a module and collect its top-level callables (skipping `_`-names) as hooks.
+#[cfg(feature = "python")]
 fn load_one_plugin(py: Python, file_stem: &str) -> Option<(PyObject, Vec<String>)> {
     let module = py.import(file_stem).ok()?;
     let dir = module.dir().ok()?;

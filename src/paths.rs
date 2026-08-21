@@ -36,7 +36,8 @@ pub fn desc_candidates(name: &str) -> Vec<PathBuf> {
 /// Activate a virtual environment by prepending its `site-packages` to `sys.path`.
 ///
 /// Handles the standard POSIX layout (`<venv>/lib/pythonX.Y/site-packages`) and the
-/// Windows layout (`<venv>/Lib/site-packages`).
+/// Windows layout (`<venv>/Lib/site-packages`). No-op without the `python` feature.
+#[cfg(feature = "python")]
 pub fn activate_venv(path_str: &str) {
     use pyo3::prelude::*;
 

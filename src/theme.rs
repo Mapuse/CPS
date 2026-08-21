@@ -2,14 +2,18 @@ use std::collections::HashMap;
 use std::path::Path;
 use std::sync::{Mutex, Once, OnceLock};
 
+#[cfg(feature = "python")]
 use pyo3::prelude::*;
+#[cfg(feature = "python")]
 use pyo3::types::PyDict;
 
 use crate::config::PythonConfig;
 use crate::expand_tilde;
+#[cfg(feature = "python")]
 use crate::error;
 use crate::info;
 use crate::paths::{desc_candidates, load_desc};
+#[cfg(feature = "python")]
 use crate::warning;
 
 /// Parsed `[theme.<id>]` sections from a `t.desc` descriptor file.
@@ -30,10 +34,15 @@ struct ThemeDescEntry {
 ///
 /// The module is imported once; [`ThemeEngine::render_prompt`] and friends invoke its
 /// Python functions on every call, so a theme can be live-edited in Python without a
-/// Rust rebuild.
+/// Rust rebuild. Built without the `python` feature this is an inert stub that always
+/// falls back to the native prompt.
+#[cfg(feature = "python")]
 pub struct ThemeEngine {
     module: PyObject,
 }
+
+#[cfg(not(feature = "python"))]
+pub struct ThemeEngine {}
 
 /// The structured result of a `render_prompt` call.
 #[derive(Debug, Clone, Default, PartialEq)]
@@ -50,6 +59,7 @@ pub struct ThemeResult {
     pub extra: HashMap<String, String>,
 }
 
+#[cfg(feature = "python")]
 impl ThemeEngine {
     /// Import the theme module named by `cfg.theme` (a `.py` path).
     ///
@@ -153,10 +163,44 @@ impl ThemeEngine {
     }
 }
 
+#[cfg(not(feature = "python"))]
+impl ThemeEngine {
+    /// Always `None` — the crate was built without Python support.
+    pub fn load(_cfg: &PythonConfig) -> Option<Self> {
+        None
+    }
+
+    /// Native fallback prompt.
+    pub fn render_prompt(&self, context: &HashMap<String, String>) -> ThemeResult {
+        ThemeResult::default_prompt(context)
+    }
+
+    /// Empty right prompt.
+    pub fn render_right_prompt(&self, _context: &HashMap<String, String>) -> String {
+        String::new()
+    }
+
+    /// Empty command summary.
+    pub fn render_command_summary(&self, _context: &HashMap<String, String>) -> String {
+        String::new()
+    }
+
+    /// Always `false`.
+    pub fn has_run(&self) -> bool {
+        false
+    }
+
+    /// Always `false`.
+    pub fn run(&self) -> bool {
+        false
+    }
+}
+
 /// Parse a Python return value into a [`ThemeResult`].
 ///
 /// Accepts either a dict with the documented keys or a plain string (used as the
 /// single line above the prompt).
+#[cfg(feature = "python")]
 fn parse_theme_result(py: Python, val: &PyObject) -> PyResult<ThemeResult> {
     let mut res = ThemeResult::default();
     let any = val.bind(py);
