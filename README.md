@@ -13,7 +13,7 @@
 
 `▐▀` `-` `▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▌`
 
-Shared Python subsystem for **`[Cudane]`** ecosystem. `pyo3` engine for **`[plugins]`**, **`[themes]`**, and **`[TUIs]`** across Cesar, Context, Outsider, MCX, and Leon.
+Shared Python subsystem for **`[Cudane]`** ecosystem. `pyo3` engine for **`[plugins]`**, **`[themes]`**, and **`[TUIs]`**.
 
 - **`[Version]`**: **`[0.0.70]`**
 
