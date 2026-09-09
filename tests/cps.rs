@@ -141,7 +141,11 @@ fn options_default_desc_dirs_cover_config_etc_and_cwd() {
     // SAFETY: tests run in parallel but every mutation here uses the same value.
     unsafe { std::env::set_var("HOME", "/tmp/fakehome") };
     let opts = Options::new("brand-x");
-    let dirs = opts.desc_dirs.iter().map(|p| p.display().to_string()).collect::<Vec<_>>();
+    let dirs = opts
+        .desc_dirs
+        .iter()
+        .map(|p| p.display().to_string())
+        .collect::<Vec<_>>();
     assert!(dirs.contains(&"/tmp/fakehome/.config/brand-x".to_string()));
     assert!(dirs.contains(&"/etc/brand-x".to_string()));
     assert!(dirs.contains(&".".to_string()));

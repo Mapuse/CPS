@@ -67,8 +67,8 @@ impl PluginManager {
         if cfg.plugins.is_empty() {
             return;
         }
-        let plugins_result: PyResult<Vec<(String, PyObject, Vec<String>)>> = Python::with_gil(
-            |py| {
+        let plugins_result: PyResult<Vec<(String, PyObject, Vec<String>)>> =
+            Python::with_gil(|py| {
                 let mut loaded = Vec::new();
                 let sys_path = py.import("sys")?.getattr("path")?;
                 for plugin_path in &cfg.plugins {
@@ -107,10 +107,13 @@ impl PluginManager {
                     }
                 }
                 Ok(loaded)
-            },
-        );
+            });
         for (name, module, hooks) in plugins_result.unwrap_or_default() {
-            self.plugins.push(LoadedPlugin { name, module, hooks });
+            self.plugins.push(LoadedPlugin {
+                name,
+                module,
+                hooks,
+            });
         }
     }
 

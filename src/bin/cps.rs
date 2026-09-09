@@ -60,9 +60,18 @@ struct PluginArgs {
 #[derive(Subcommand)]
 enum PluginAction {
     List,
-    Run { alias: String, #[arg(trailing_var_arg = true, allow_hyphen_values = true)] args: Vec<String> },
-    Register { name: String, path: String },
-    Unregister { name: String },
+    Run {
+        alias: String,
+        #[arg(trailing_var_arg = true, allow_hyphen_values = true)]
+        args: Vec<String>,
+    },
+    Register {
+        name: String,
+        path: String,
+    },
+    Unregister {
+        name: String,
+    },
 }
 
 #[derive(Parser)]

@@ -8,9 +8,9 @@ use pyo3::prelude::*;
 use pyo3::types::PyDict;
 
 use crate::config::PythonConfig;
-use crate::expand_tilde;
 #[cfg(feature = "python")]
 use crate::error;
+use crate::expand_tilde;
 use crate::info;
 use crate::paths::{desc_candidates, load_desc};
 #[cfg(feature = "python")]
@@ -220,8 +220,7 @@ fn parse_theme_result(py: Python, val: &PyObject) -> PyResult<ThemeResult> {
             && let Ok(cd) = c.downcast::<PyDict>()
         {
             for item in cd.iter() {
-                if let (Ok(key), Ok(val)) =
-                    (item.0.extract::<String>(), item.1.extract::<String>())
+                if let (Ok(key), Ok(val)) = (item.0.extract::<String>(), item.1.extract::<String>())
                 {
                     res.colors.insert(key, val);
                 }

@@ -3,11 +3,11 @@ use std::sync::Once;
 use std::sync::atomic::{AtomicBool, Ordering};
 
 use crate::config::PythonConfig;
+#[cfg(feature = "python")]
+use crate::paths::activate_venv;
 use crate::plugin::PluginManager;
 use crate::theme::ThemeEngine;
 use crate::tui::TuiEngine;
-#[cfg(feature = "python")]
-use crate::paths::activate_venv;
 #[cfg(feature = "python")]
 use crate::warning;
 
@@ -50,7 +50,10 @@ impl PythonEngine {
     pub fn needs_boot(cfg: &PythonConfig) -> bool {
         cfg.enabled
             && !SHUT_DOWN.load(Ordering::SeqCst)
-            && (!cfg.theme.is_empty() || !cfg.tui.is_empty() || !cfg.plugins.is_empty() || cfg.tui_mode)
+            && (!cfg.theme.is_empty()
+                || !cfg.tui.is_empty()
+                || !cfg.plugins.is_empty()
+                || cfg.tui_mode)
     }
 
     /// Boot the engine from a config. Safe to call multiple times; the interpreter
@@ -83,18 +86,18 @@ impl PythonEngine {
             if !cfg.venv_path.is_empty() {
                 activate_venv(&cfg.venv_path);
             }
-            let theme = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-                ThemeEngine::load(cfg)
-            }))
-            .unwrap_or_else(|e| {
-                warning(&format!("python theme failed to load: {e:?}"));
-                None
-            });
-            let tui = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| TuiEngine::load(cfg)))
-                .unwrap_or_else(|e| {
-                    warning(&format!("python tui failed to load: {e:?}"));
-                    None
-                });
+            let theme =
+                std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| ThemeEngine::load(cfg)))
+                    .unwrap_or_else(|e| {
+                        warning(&format!("python theme failed to load: {e:?}"));
+                        None
+                    });
+            let tui =
+                std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| TuiEngine::load(cfg)))
+                    .unwrap_or_else(|e| {
+                        warning(&format!("python tui failed to load: {e:?}"));
+                        None
+                    });
             let mut plugins = PluginManager::new();
             let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
                 plugins.load_all(cfg);

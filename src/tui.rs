@@ -6,9 +6,9 @@ use std::sync::{Mutex, Once, OnceLock};
 use pyo3::prelude::*;
 
 use crate::config::PythonConfig;
-use crate::expand_tilde;
 #[cfg(feature = "python")]
 use crate::error;
+use crate::expand_tilde;
 use crate::info;
 use crate::paths::{desc_candidates, load_desc};
 #[cfg(feature = "python")]
