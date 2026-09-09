@@ -1,7 +1,8 @@
-/target
-/build
-/builddir
+x86_64/
+aarch64/
+target
+build/
+builddir/
 Cargo.lock.orig
-
 __pycache__/
 *.pyc
